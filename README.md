@@ -29,7 +29,38 @@
 
 ---
 
-## Quick Start
+## Quick Install
+
+```bash
+sudo bash <(wget -qO- https://raw.githubusercontent.com/ShanudhaTirosh/netch-vpn/main/install.sh) -install y
+```
+
+**With domains pre-set (no prompts):**
+```bash
+sudo bash <(wget -qO- https://raw.githubusercontent.com/ShanudhaTirosh/netch-vpn/main/install.sh) -install y -subdomain vpn.yourdomain.com -reality_domain r.yourdomain.com
+```
+
+**Uninstall:**
+```bash
+sudo bash <(wget -qO- https://raw.githubusercontent.com/ShanudhaTirosh/netch-vpn/main/install.sh) -uninstall y
+```
+
+---
+
+## All Arguments
+
+| Argument | Value | What it does |
+|----------|-------|-------------|
+| `-install` | `y` | Installs Nginx, Certbot, all packages |
+| `-subdomain` | `vpn.yourdomain.com` | Sets main panel domain |
+| `-reality_domain` | `r.yourdomain.com` | Sets REALITY inbound domain |
+| `-uninstall` | `y` | Removes everything cleanly |
+| `-websub` | `0` or `1` | `0` = modern sub page, `1` = classic |
+| `-clash` | `0`–`3` | Which Clash YAML template to use |
+
+---
+
+## Full Setup Guide
 
 ### Prerequisites
 - Clean **Ubuntu 20.04 / 22.04** VPS
