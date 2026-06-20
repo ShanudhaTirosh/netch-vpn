@@ -117,6 +117,11 @@ scripts/
   netch-warp-setup.sh              # best-effort WARP registration helper
 sub_templates/
   netch-glass/index.html           # native Go html/template sub page (subThemeDir)
+panel-theme/                       # 3x-ui frontend overlay (glass + brand tokens)
+  frontend/src/hooks/useTheme.tsx
+  frontend/src/styles/page-shell.css
+  frontend/src/styles/page-cards.css
+  apply.sh                         # apply overlay onto a 3x-ui source checkout
 ```
 
 ---
@@ -132,8 +137,11 @@ sub_templates/
 
 The panel theme (teal `colorPrimary` + glassmorphism cards) is applied in the
 3x-ui frontend via `ConfigProvider` tokens and `page-shell.css` /
-`page-cards.css`. The sub page and favicon use the same tokens for a single
-visual identity.
+`page-cards.css`. Those edits ship as a build-from-source overlay in
+[`panel-theme/`](panel-theme/) (run `panel-theme/apply.sh` against a 3x-ui
+checkout, then rebuild). The sub page and favicon use the same tokens for a
+single visual identity; the favicon is injected into the stock panel at the
+Nginx layer, so it needs no rebuild.
 
 ---
 
