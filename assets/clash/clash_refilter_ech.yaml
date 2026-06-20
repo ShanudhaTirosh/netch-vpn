@@ -1,0 +1,51 @@
+# Netch VPN — Clash/Mihomo profile: re:filter rule-set + ECH-enabled DNS.
+# install.sh substitutes ${DOMAIN} and ${SUB_PATH}. Selectable via -clash 3.
+# Uses DoH with ECH-friendly resolvers and a community re:filter ruleset.
+# Fresh baseline — review before production; rule-set URLs are examples.
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: info
+ipv6: true
+external-controller: 127.0.0.1:9090
+
+dns:
+  enable: true
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  # ECH (Encrypted Client Hello) is negotiated by mihomo over DoH/DoT when the
+  # resolver and target support it; these resolvers publish the needed records.
+  nameserver:
+    - https://cloudflare-dns.com/dns-query
+    - https://dns.google/dns-query
+  fallback:
+    - tls://1.1.1.1:853
+    - tls://8.8.8.8:853
+
+proxy-providers:
+  netch:
+    type: http
+    url: "https://${DOMAIN}/${SUB_PATH}?clash=meta"
+    interval: 3600
+    path: ./providers/netch.yaml
+    health-check: { enable: true, url: https://www.gstatic.com/generate_204, interval: 300 }
+
+proxy-groups:
+  - { name: NETCH, type: select, use: [netch], proxies: [AUTO, DIRECT] }
+  - { name: AUTO,  type: url-test, use: [netch], url: https://www.gstatic.com/generate_204, interval: 300, tolerance: 50 }
+
+rule-providers:
+  refilter:
+    type: http
+    behavior: domain
+    format: text
+    url: "https://raw.githubusercontent.com/1andrevich/Re-filter-lists/main/domains_all.lst"
+    path: ./rules/refilter.txt
+    interval: 86400
+
+rules:
+  - GEOIP,private,DIRECT,no-resolve
+  - GEOSITE,category-ads-all,REJECT
+  - RULE-SET,refilter,NETCH
+  - MATCH,NETCH

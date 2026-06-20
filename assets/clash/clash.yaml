@@ -1,0 +1,60 @@
+# Netch VPN — Clash / Mihomo (clash-meta) config.
+# install.sh substitutes ${DOMAIN} and ${SUB_PATH} into this file (its existing
+# sed wiring is preserved). Proxies are pulled live from your subscription via a
+# proxy-provider, so this file does not need per-node edits.
+#
+# NOTE (authored fresh for v1.2.0 — review before production): the original
+# netch-vpn-main/assets/clash/*.yaml were not present in the source provided,
+# so this is a sensible clash-meta baseline rather than a port of a prior file.
+
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: info
+ipv6: true
+external-controller: 127.0.0.1:9090
+
+dns:
+  enable: true
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  nameserver:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+  fallback:
+    - https://dns.google/dns-query
+    - tls://1.0.0.1:853
+
+proxy-providers:
+  netch:
+    type: http
+    # sub2sing-box / x-ui subscription endpoint (clash-meta format).
+    url: "https://${DOMAIN}/${SUB_PATH}?clash=meta"
+    interval: 3600
+    path: ./providers/netch.yaml
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+
+proxy-groups:
+  - name: NETCH
+    type: select
+    use:
+      - netch
+    proxies:
+      - AUTO
+      - DIRECT
+  - name: AUTO
+    type: url-test
+    use:
+      - netch
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+
+rules:
+  - GEOIP,private,DIRECT,no-resolve
+  - GEOSITE,category-ads-all,REJECT
+  - MATCH,NETCH

@@ -1,0 +1,22 @@
+# Local / runtime artifacts — never commit these
+*.log
+*.tar.gz
+*.db
+*.bak
+*.tmp
+
+# Backups produced by backup.sh
+netch-backup-*.tar.gz
+
+# Certs / secrets (should never live in the repo)
+*.pem
+*.key
+.env
+
+# Clash provider/rule caches
+providers/
+rules/
+
+# OS cruft
+.DS_Store
+Thumbs.db

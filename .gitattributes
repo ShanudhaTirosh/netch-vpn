@@ -1,0 +1,14 @@
+# Shell scripts MUST be LF — CRLF breaks the shebang and heredocs on Linux.
+*.sh    text eol=lf
+*.yaml  text eol=lf
+*.yml   text eol=lf
+*.html  text eol=lf
+*.md    text eol=lf
+
+# Treat brand binaries as binary (no EOL/diff munging).
+*.ico   binary
+*.png   binary
+*.jpg   binary
+
+# SVG is text but keep LF for consistent diffs.
+*.svg   text eol=lf
