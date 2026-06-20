@@ -25,7 +25,7 @@ proxy-providers:
 
 proxy-groups:
   - { name: NETCH, type: select, use: [netch], proxies: [AUTO, DIRECT] }
-  - { name: AUTO,  type: url-test, use: [netch], url: https://www.gstatic.com/generate_204, interval: 300, tolerance: 50 }
+  - { name: AUTO, type: url-test, use: [netch], url: https://www.gstatic.com/generate_204, interval: 300, tolerance: 50 }
 
 rules:
   - GEOIP,private,DIRECT,no-resolve

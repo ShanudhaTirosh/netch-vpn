@@ -1,0 +1,15 @@
+# Relaxed yamllint for Clash/Mihomo profiles.
+# These use flow mappings ({ ... }), long provider URLs, and ${DOMAIN} tokens
+# that install.sh substitutes — none of which are real YAML problems.
+extends: relaxed
+
+rules:
+  line-length: disable      # provider/rule URLs are long by nature
+  braces: disable           # flow mappings are intentional and readable here
+  brackets: disable         # flow sequences (proxies/nameserver lists)
+  comments:
+    min-spaces-from-content: 1
+  truthy: disable           # mode: rule, enable: true etc. read fine
+  document-start: disable   # no leading --- required
+  empty-lines:
+    max: 2

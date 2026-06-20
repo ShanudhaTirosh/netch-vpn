@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: sudo apt-get update -qq && sudo apt-get install -y shellcheck
+
+      - name: Lint shell scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=$(git ls-files '*.sh')
+          echo "Scripts: $files"
+          echo "::group::Full report (informational — all severities)"
+          # Don't fail the build on style warnings; show them for visibility.
+          shellcheck -x $files || true
+          echo "::endgroup::"
+          echo "Gating on ERROR severity only (real bugs, not style):"
+          # This step fails the build only on genuine errors.
+          shellcheck -x --severity=error $files
+
+  html-validate:
+    name: HTML validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install validator
+        run: pip install --quiet html5validator
+
+      - name: Validate static subscription pages (strict)
+        run: |
+          # assets/*.html only contain ${TOKEN} inside <script> JS strings,
+          # which are valid markup — so these must pass strictly.
+          html5validator --root assets --match '*.html'
+
+      - name: Validate native Go template (lenient — template tokens allowed)
+        run: |
+          # sub_templates/**/*.html carry {{ ... }} Go template directives that a
+          # strict HTML checker can't evaluate. Report issues but don't gate on
+          # template-syntax noise.
+          html5validator --root sub_templates --match '*.html' \
+            --ignore-re '(\{\{.*\}\})|(\$\{.*\})' || true
+
+  yaml-lint:
+    name: YAML lint (Clash profiles)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install yamllint
+        run: pip install --quiet yamllint
+
+      - name: Lint Clash YAML
+        run: yamllint -c .yamllint assets/clash

@@ -1,5 +1,7 @@
 # Netch VPN / NovaNetchX
 
+[![CI](https://github.com/ShanudhaTirosh/netch-vpn/actions/workflows/ci.yml/badge.svg)](https://github.com/ShanudhaTirosh/netch-vpn/actions/workflows/ci.yml)
+
 Self-hosted VPN/proxy automation built on top of the upstream
 [3x-ui panel](https://github.com/MHSanaei/3x-ui). One script provisions a
 hardened, single-VPS stack: Nginx SNI stream router on `:443`, five pre-seeded
@@ -155,6 +157,18 @@ Then log into the panel, open the glass sub page at
 shows the real client address.
 
 ---
+
+## Continuous integration
+
+Every push / PR runs `.github/workflows/ci.yml`:
+
+- **ShellCheck** on all `*.sh` — full report is informational; the build only
+  fails on genuine `error`-severity findings (not style warnings).
+- **HTML validate** — `assets/*.html` are checked strictly; the Go-template
+  `sub_templates/**/*.html` is checked leniently (template `{{ }}`/`${ }`
+  tokens are ignored since a static checker can't render them).
+- **YAML lint** — Clash profiles under `assets/clash/` (relaxed `.yamllint`:
+  flow mappings and long provider URLs are allowed).
 
 ## Credits
 
