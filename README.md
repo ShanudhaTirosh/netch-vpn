@@ -1,13 +1,22 @@
+<div align="center">
+
+<img src="https://raw.githubusercontent.com/ShanudhaTirosh/BRAND_LOGOS/main/SHANUTECHX.png" alt="Netch VPN / NovaNetchX" width="180">
+
 # Netch VPN / NovaNetchX
 
-[![CI](https://github.com/ShanudhaTirosh/netch-vpn/actions/workflows/ci.yml/badge.svg)](https://github.com/ShanudhaTirosh/netch-vpn/actions/workflows/ci.yml)
+**Self-hosted VPN/proxy automation on top of upstream [3x-ui](https://github.com/MHSanaei/3x-ui).**
 
-Self-hosted VPN/proxy automation built on top of the upstream
-[3x-ui panel](https://github.com/MHSanaei/3x-ui). One script provisions a
-hardened, single-VPS stack: Nginx SNI stream router on `:443`, five pre-seeded
-Xray inbounds, Let's Encrypt certs, BBR/sysctl tuning, a `sub2sing-box`
-converter, a generic camouflage decoy site, and a glassmorphism subscription
-page rendered by 3x-ui's native template engine.
+[![CI](https://github.com/ShanudhaTirosh/netch-vpn/actions/workflows/ci.yml/badge.svg)](https://github.com/ShanudhaTirosh/netch-vpn/actions/workflows/ci.yml)
+[![Release](https://github.com/ShanudhaTirosh/netch-vpn/actions/workflows/release.yml/badge.svg)](https://github.com/ShanudhaTirosh/netch-vpn/actions/workflows/release.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-289DB7.svg)](LICENSE)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%20%7C%2022.04-2B2D38)
+
+</div>
+
+One script provisions a hardened, single-VPS stack: Nginx SNI stream router on
+`:443`, five pre-seeded Xray inbounds, Let's Encrypt certs, BBR/sysctl tuning, a
+`sub2sing-box` converter, a generic camouflage decoy site, and a glassmorphism
+subscription page rendered by 3x-ui's native template engine.
 
 > **Maintained-upstream, not a fork.** The panel itself is installed from
 > official 3x-ui releases at install time. This repo is the installer,
@@ -87,8 +96,14 @@ for the IP-attribution mechanism.
 ```
 install.sh                         # the installer (v1.2.0)
 backup.sh                          # snapshot / restore
+SECURITY.md                        # security policy / reporting
+CONTRIBUTING.md                    # contribution + local-lint guide
+.github/workflows/ci.yml           # shellcheck + HTML validate + yamllint
+.github/workflows/release.yml      # auto GitHub Release on tag push
+.github/workflows/scan.yml         # gitleaks secret scan
 assets/
   favicon.svg / favicon.ico        # real NovaNetchX brand mark (navy/teal)
+  brand/SHANUTECHX.png / .jpg       # full brand logo (ShanuTechX)
   randomfakehtml.sh                # generic camouflage decoy generator
   sub-page.html                    # static sub landing (glass)   -> -websub 0
   sub-page-classic.html            # static sub landing (classic) -> -websub 1
