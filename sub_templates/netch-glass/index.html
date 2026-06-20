@@ -223,10 +223,13 @@
   "use strict";
 
   // ---- Data from the template ------------------------------------------------
-  var subUrl      = {{ .subUrl       | js }};
-  var subJsonUrl  = {{ .subJsonUrl   | js }};
-  var subClashUrl = {{ .subClashUrl  | js }};
-  var subTitle    = {{ if .subTitle }}{{ .subTitle | js }}{{ else }}"Netch VPN"{{ end }};
+  // html/template contextual autoescaping emits a properly quoted + escaped JS
+  // string literal here. Do NOT add "| js": that escaper does not add the
+  // surrounding quotes, which would produce invalid JS and break the page.
+  var subUrl      = {{ .subUrl }};
+  var subJsonUrl  = {{ .subJsonUrl }};
+  var subClashUrl = {{ .subClashUrl }};
+  var subTitle    = {{ if .subTitle }}{{ .subTitle }}{{ else }}"Netch VPN"{{ end }};
 
   var links = Array.prototype.map.call(
     document.querySelectorAll("#rawLinks li"),

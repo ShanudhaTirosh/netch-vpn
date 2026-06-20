@@ -4,6 +4,44 @@ All notable changes to **NovaNetchX VPN Installer** are documented here.
 
 ---
 
+## [1.2.0] — 2026-06
+
+### Security
+- **Randomized panel credentials** per install (was hard-coded `Shanu`/`admin`);
+  printed once in the final summary. No credentials are committed anywhere.
+- Added gitleaks secret-scanning CI; `.gitignore` blocks certs/keys/`.env`.
+
+### Added
+- Native **glassmorphism subscription page** rendered by 3x-ui's Go
+  `html/template` engine (`subThemeDir` → `sub_templates/netch-glass/`).
+- Real **NovaNetchX brand** (navy `#03061D`/`#02051D`, teal `#289DB7`) across
+  favicon, sub page, and a `panel-theme/` overlay for the 3x-ui frontend
+  (`useTheme.tsx` + `page-shell.css` + `page-cards.css`) with `apply.sh`.
+- Brand logo assets (`assets/brand/SHANUTECHX.png` / `.jpg`).
+- Cloudflare **WARP** selective-routing docs + `scripts/netch-warp-setup.sh`.
+- `CHECK_DB_SCHEMA()` preflight: aborts loudly on inbounds/settings schema drift.
+- CI (`shellcheck` + HTML validate + `yamllint`), release automation, secret scan.
+- `SECURITY.md`, `CONTRIBUTING.md`, `.gitattributes` (LF enforcement).
+
+### Changed
+- Consistent real-client-IP + sockopt across all 5 inbounds (per
+  `docs/real-client-ip.md`): WS/XHTTP gain `trustedXForwardedFor`, the 7443
+  vhost recovers the client IP from PROXY protocol (`real_ip_header`), and
+  `tcpFastOpen`/`bbr`/`tcpMptcp` is applied to every TCP inbound.
+- Performance: Nginx keepalive tuning, `somaxconn`/`tcp_max_syn_backlog` sysctl.
+- Favicon now ships the real brand asset (repo-first; brand-accurate fallback)
+  instead of the purple `#7c3aed` placeholder.
+- `check_free` no longer depends on `nc` (uses `ss` with `nc` fallback).
+
+### Fixed
+- Sub template JS: removed `{{ .x | js }}` (which produced **unquoted** JS and
+  broke the page); rely on html/template contextual autoescaping. Verified with
+  Go 1.26 `html/template`.
+- Clash profiles: dropped the bogus `?clash=meta` query param (3x-ui serves
+  Clash on a separate path, not via a format query).
+
+---
+
 ## [1.0.0] — 2025-06
 
 ### Added

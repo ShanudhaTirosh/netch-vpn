@@ -36,7 +36,8 @@ jobs:
         run: |
           tag="${{ steps.tag.outputs.tag }}"
           tar -czf "netch-vpn-${tag}.tar.gz" \
-            install.sh backup.sh assets scripts sub_templates README.md LICENSE
+            install.sh backup.sh assets scripts sub_templates panel-theme \
+            README.md LICENSE CHANGELOG.md SECURITY.md CONTRIBUTING.md
           sha256sum install.sh "netch-vpn-${tag}.tar.gz" > SHA256SUMS.txt
           echo "Artifacts:"; ls -lh netch-vpn-*.tar.gz SHA256SUMS.txt
 

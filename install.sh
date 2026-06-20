@@ -130,8 +130,18 @@ gen_random_string() {
 
 check_free() {
     local port=$1
-    nc -z 127.0.0.1 $port &>/dev/null
-    return $?
+    # Returns 0 when the port is IN USE, non-zero when free (make_port relies on
+    # this inverted sense). Prefer ss (always present via iproute2); fall back to
+    # nc; if neither exists, assume free rather than loop forever.
+    if command -v ss &>/dev/null; then
+        ss -ltnuH 2>/dev/null | awk '{print $5}' | grep -qE "[:.]${port}$" && return 0
+        return 1
+    elif command -v nc &>/dev/null; then
+        nc -z 127.0.0.1 "$port" &>/dev/null
+        return $?
+    else
+        return 1
+    fi
 }
 
 make_port() {

@@ -29,8 +29,12 @@ dns:
 proxy-providers:
   netch:
     type: http
-    # sub2sing-box / x-ui subscription endpoint (clash-meta format).
-    url: "https://${DOMAIN}/${SUB_PATH}?clash=meta"
+    # NOTE (verify before production): ${SUB_PATH} is the RAW subscription base.
+    # mihomo/clash-meta can parse a base64 v2ray subscription from it. For a
+    # clash-native feed instead, enable the panel Clash subscription
+    # (subClashEnable=true + a wired subClashPath) and point this URL there.
+    # Per-client feeds need the client's subId appended to the path.
+    url: "https://${DOMAIN}/${SUB_PATH}"
     interval: 3600
     path: ./providers/netch.yaml
     health-check:
