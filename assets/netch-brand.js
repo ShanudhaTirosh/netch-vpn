@@ -19,11 +19,14 @@
     for (var i = 0; i < batch.length; i++) {
       var t = batch[i];
       var v = t.nodeValue;
-      if (v && RE.test(v)) {
-        RE.lastIndex = 0;
-        t.nodeValue = v.replace(RE, FROM);
-      }
+      if (!v) continue;
+      var nv = v;
+      if (RE.test(v)) { RE.lastIndex = 0; nv = v.replace(RE, FROM); }
       RE.lastIndex = 0;
+      // Collapsed sidebar shows just "3X" (no "-UI") — replace only when the
+      // entire trimmed text node is that brand token, to avoid false matches.
+      if (/^\s*3\s*[xX]\s*$/.test(nv)) nv = nv.replace(/3\s*[xX]/, 'SX');
+      if (nv !== v) t.nodeValue = nv;
     }
   }
 
