@@ -50,11 +50,29 @@
     }
   }
 
+  // Hide the donation/sponsor heart and any donation links. We hide (not remove)
+  // so React's reconciliation isn't disrupted.
+  function removeDonation(root) {
+    var hearts = root.querySelectorAll('.anticon-heart, .anticon-heart-o, [aria-label="heart"]');
+    for (var i = 0; i < hearts.length; i++) {
+      var host = hearts[i].closest("button, a, .ant-btn") || hearts[i];
+      host.style.display = "none";
+    }
+    var don = root.querySelectorAll(
+      'a[href*="opencollective"], a[href*="patreon"], a[href*="paypal"], a[href*="donate"], a[href*="sponsor"], a[href*="buymeacoffee"], a[href*="ko-fi"]'
+    );
+    for (var j = 0; j < don.length; j++) {
+      var b = don[j].closest("button, .ant-btn") || don[j];
+      b.style.display = "none";
+    }
+  }
+
   function run() {
     try {
       rebrandTextNodes(document.body);
       rebrandTitle();
       rebrandLinks(document.body);
+      removeDonation(document.body);
     } catch (e) { /* ignore */ }
   }
 

@@ -137,3 +137,60 @@ body.dark .ant-select-focused .ant-select-selector {
   border-color: var(--netch-accent) !important;
   box-shadow: 0 0 0 2px rgba(40, 157, 183, 0.20) !important;
 }
+
+/* ---- Modals / drawers / popups (match the glass UI) ----------------------- */
+body.dark .ant-modal-content,
+body.dark .ant-modal-header,
+body.dark .ant-drawer-content,
+body.dark .ant-drawer-header,
+body.dark .ant-modal-confirm .ant-modal-content {
+  background: rgba(8, 12, 34, 0.94) !important;
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid rgba(40, 157, 183, 0.18) !important;
+}
+body.dark .ant-modal-header, body.dark .ant-drawer-header { border-bottom: 1px solid rgba(40,157,183,.14) !important; }
+body.dark .ant-modal-footer { border-top: 1px solid rgba(40,157,183,.14) !important; }
+body.dark .ant-modal-mask, body.dark .ant-drawer-mask {
+  background: rgba(2, 5, 15, 0.62) !important;
+  backdrop-filter: blur(3px);
+}
+body.dark .ant-modal .ant-tabs-tab-active .ant-tabs-tab-btn,
+body.dark .ant-drawer .ant-tabs-tab-active .ant-tabs-tab-btn { color: var(--netch-accent) !important; }
+
+/* Select / date / cascader popups */
+body.dark .ant-select-dropdown,
+body.dark .ant-picker-dropdown .ant-picker-panel-container,
+body.dark .ant-cascader-dropdown .ant-cascader-menus,
+body.dark .ant-tooltip-inner {
+  background: rgba(8, 12, 34, 0.97) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(40, 157, 183, 0.18) !important;
+}
+body.dark .ant-select-item-option-selected { background: rgba(40,157,183,.18) !important; }
+
+/* ---- Tables (were near-black; make them navy glass) ----------------------- */
+body.dark .ant-table { background: transparent !important; }
+body.dark .ant-table-thead > tr > th {
+  background: rgba(20, 26, 54, 0.72) !important;
+  color: #c2cbda !important;
+  border-bottom: 1px solid rgba(40, 157, 183, 0.18) !important;
+}
+body.dark .ant-table-tbody > tr > td {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+body.dark .ant-table-tbody > tr:hover > td,
+body.dark .ant-table-tbody > tr.ant-table-row:hover > td { background: rgba(40, 157, 183, 0.08) !important; }
+/* Sticky/fixed columns need an opaque-ish backing so rows don't bleed through. */
+body.dark .ant-table-cell-fix-left,
+body.dark .ant-table-cell-fix-right { background: #0b1030 !important; }
+body.dark .ant-table-thead .ant-table-cell-fix-left,
+body.dark .ant-table-thead .ant-table-cell-fix-right { background: #141a39 !important; }
+body.dark .ant-table-placeholder,
+body.dark .ant-table-placeholder:hover > td { background: transparent !important; }
+
+/* Donation heart / sponsor button — hidden (JS also removes it as a backup). */
+body.dark .ant-layout-sider .anticon-heart,
+body.dark .ant-layout-header .anticon-heart { display: none !important; }

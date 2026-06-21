@@ -1,6 +1,6 @@
 #!/bin/bash
 ##########################################################################
-#  Netch VPN / NovaNetchX Installer  v1.2.2
+#  Netch VPN / NovaNetchX Installer  v1.2.3
 #  Developer  : ShanuFX  (github.com/ShanudhaTirosh)
 #  Company    : Netch Solutions  (netchsolutions.com)
 #  Repository : github.com/ShanudhaTirosh/netch-vpn
@@ -9,8 +9,11 @@
 #               3x-ui Panel by MHSanaei (github.com/MHSanaei/3x-ui)
 #               sub2sing-box by legiz-ru (github.com/legiz-ru/sub2sing-box)
 ##########################################################################
-#  CHANGELOG  (v1.1.0 -> v1.2.2)
+#  CHANGELOG  (v1.1.0 -> v1.2.3)
 #  ----------
+#  [v1.2.3]    Theme polish: glass-themed modals/drawers/popups, navy tables,
+#              themed select/date dropdowns; footer GitHub/version link repointed
+#              to the Netch repo; donation/sponsor heart icon removed.
 #  [v1.2.2]    Panel UI theme now applies to the STOCK prebuilt 3x-ui without a
 #              source rebuild: a brand glassmorphism stylesheet (netch-theme.css)
 #              is injected into the SPA via the same Nginx sub_filter as the
@@ -68,7 +71,7 @@ msg_inf  '  ____) | | | | (_| | | | | |_| | |   | |__/ / / /'
 msg_inf  ' |_____/|_| |_|\\__,_|_| |_|\\__,_|_|   |_____/_/_/ '
 echo
 msg_cyan ' ┌──────────────────────────────────────────────────────────┐'
-msg_cyan ' │   ShanuFX VPN Installer  v1.2.2                         │'
+msg_cyan ' │   ShanuFX VPN Installer  v1.2.3                         │'
 msg_cyan ' │   Powered by Netch Solutions  ·  netchsolutions.com      │'
 msg_cyan ' │   github.com/ShanudhaTirosh/netch-vpn                          │'
 msg_cyan ' └──────────────────────────────────────────────────────────┘'
@@ -1278,7 +1281,7 @@ if systemctl is-active --quiet x-ui; then
     msg_inf  ' |_____/|_| |_|\__,_|_| |_|\__,_|_|   |____/ '
     echo
     msg_cyan ' ┌──────────────────────────────────────────────────────────┐'
-    msg_cyan ' │   Netch Solutions  ·  VPN Installer v1.2.2               │'
+    msg_cyan ' │   Netch Solutions  ·  VPN Installer v1.2.3               │'
     msg_cyan ' │   Installation Complete!                                  │'
     msg_cyan ' └──────────────────────────────────────────────────────────┘'
     echo
