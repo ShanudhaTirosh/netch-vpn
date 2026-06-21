@@ -158,25 +158,38 @@ body.dark .ant-select-focused .ant-select-selector {
   box-shadow: 0 0 0 2px rgba(40, 157, 183, 0.20) !important;
 }
 
-/* ---- Modals / drawers / popups (match the glass UI) ----------------------- */
+/* ---- Modals / drawers / popups (match the main-UI glass cards) ------------ */
 body.dark .ant-modal-content,
-body.dark .ant-modal-header,
 body.dark .ant-drawer-content,
-body.dark .ant-drawer-header,
 body.dark .ant-modal-confirm .ant-modal-content {
-  background: rgba(8, 12, 34, 0.94) !important;
-  backdrop-filter: blur(22px) saturate(160%);
-  -webkit-backdrop-filter: blur(22px) saturate(160%);
-  border: 1px solid rgba(40, 157, 183, 0.18) !important;
+  /* Same navy radial-glow gradient + glass as .ant-card, so popups read as
+     glass cards floating on the canvas rather than flat dark boxes. */
+  background:
+    radial-gradient(700px 420px at 12% -12%, rgba(40, 157, 183, 0.16), transparent 60%),
+    radial-gradient(620px 520px at 112% 0%, rgba(72, 123, 215, 0.12), transparent 55%),
+    linear-gradient(160deg, rgba(11, 16, 42, 0.96) 0%, rgba(4, 7, 26, 0.97) 100%) !important;
+  backdrop-filter: blur(24px) saturate(165%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(165%) !important;
+  border: 1px solid rgba(40, 157, 183, 0.22) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
 }
-body.dark .ant-modal-header, body.dark .ant-drawer-header { border-bottom: 1px solid rgba(40,157,183,.14) !important; }
-body.dark .ant-modal-footer { border-top: 1px solid rgba(40,157,183,.14) !important; }
+/* Blend header/body/footer into the glass instead of separate dark bars. */
+body.dark .ant-modal-header,
+body.dark .ant-drawer-header,
+body.dark .ant-modal-body,
+body.dark .ant-drawer-body,
+body.dark .ant-modal-footer { background: transparent !important; }
+body.dark .ant-modal-header, body.dark .ant-drawer-header { border-bottom: 1px solid rgba(40, 157, 183, 0.14) !important; }
+body.dark .ant-modal-footer { border-top: 1px solid rgba(40, 157, 183, 0.14) !important; }
+body.dark .ant-modal-title, body.dark .ant-drawer-title { color: #f4f7fb !important; }
 body.dark .ant-modal-mask, body.dark .ant-drawer-mask {
   background: rgba(2, 5, 15, 0.62) !important;
   backdrop-filter: blur(3px);
 }
 body.dark .ant-modal .ant-tabs-tab-active .ant-tabs-tab-btn,
 body.dark .ant-drawer .ant-tabs-tab-active .ant-tabs-tab-btn { color: var(--netch-accent) !important; }
+body.dark .ant-modal .ant-tabs-top > .ant-tabs-nav::before,
+body.dark .ant-drawer .ant-tabs-top > .ant-tabs-nav::before { border-bottom-color: rgba(255,255,255,0.08) !important; }
 
 /* Select / date / cascader popups */
 body.dark .ant-select-dropdown,
