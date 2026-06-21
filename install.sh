@@ -1,6 +1,6 @@
 #!/bin/bash
 ##########################################################################
-#  Netch VPN / NovaNetchX Installer  v1.2.0
+#  Netch VPN / NovaNetchX Installer  v1.2.1
 #  Developer  : ShanuFX  (github.com/ShanudhaTirosh)
 #  Company    : Netch Solutions  (netchsolutions.com)
 #  Repository : github.com/ShanudhaTirosh/netch-vpn
@@ -9,8 +9,12 @@
 #               3x-ui Panel by MHSanaei (github.com/MHSanaei/3x-ui)
 #               sub2sing-box by legiz-ru (github.com/legiz-ru/sub2sing-box)
 ##########################################################################
-#  CHANGELOG  (v1.1.0 -> v1.2.0)
+#  CHANGELOG  (v1.1.0 -> v1.2.1)
 #  ----------
+#  [v1.2.1]    Fix: core deps (certbot/nginx/sqlite3/fuser) are now installed
+#              UNCONDITIONALLY with a hard preflight, instead of only under
+#              "-install y" — fixes "certbot: command not found" on plain runs.
+#              Start banner version corrected to match.
 #  [SECURITY]  Panel credentials are now randomized per install (was the
 #              hard-coded Shanu/admin). They are printed once in the final
 #              "Panel Access" summary and never again.
@@ -60,7 +64,7 @@ msg_inf  '  ____) | | | | (_| | | | | |_| | |   | |__/ / / /'
 msg_inf  ' |_____/|_| |_|\\__,_|_| |_|\\__,_|_|   |_____/_/_/ '
 echo
 msg_cyan ' ┌──────────────────────────────────────────────────────────┐'
-msg_cyan ' │   ShanuFX VPN Installer  v1.0.0                         │'
+msg_cyan ' │   ShanuFX VPN Installer  v1.2.1                         │'
 msg_cyan ' │   Powered by Netch Solutions  ·  netchsolutions.com      │'
 msg_cyan ' │   github.com/ShanudhaTirosh/netch-vpn                          │'
 msg_cyan ' └──────────────────────────────────────────────────────────┘'
@@ -250,16 +254,35 @@ fi
 
 ############################### INSTALL PACKAGES ################################################
 ufw disable
-if [[ ${INSTALL} == *"y"* ]]; then
-    version=$(grep -oP '(?<=VERSION_ID=")[0-9]+' /etc/os-release)
-    if [[ "$version" == "20" || "$version" == "22" ]]; then
-        msg_inf "Detected Ubuntu $version — proceeding with package install..."
-    fi
-    $Pak -y update
-    $Pak -y install curl wget jq bash sudo nginx-full certbot python3-certbot-nginx sqlite3 ufw
-    systemctl daemon-reload && systemctl enable --now nginx
+
+# Core dependencies are ALWAYS ensured here (idempotent), regardless of the
+# -install flag. The rest of the script uses certbot/nginx/sqlite3/fuser
+# unconditionally, so gating their install behind "-install y" previously caused
+# "certbot: command not found" (and similar) when run without that flag.
+version=$(grep -oP '(?<=VERSION_ID=")[0-9]+' /etc/os-release 2>/dev/null)
+msg_inf "Detected OS version: ${version:-unknown} — ensuring dependencies..."
+export DEBIAN_FRONTEND=noninteractive
+$Pak -y update
+$Pak -y install curl wget jq bash sudo nginx-full certbot python3-certbot-nginx \
+                sqlite3 ufw netcat-openbsd psmisc openssl ca-certificates
+systemctl daemon-reload
+systemctl enable --now nginx 2>/dev/null || true
+
+# Hard preflight: fail early with a clear message if a required tool is still
+# missing (e.g. certbot absent from the distro repos) instead of dying deep in
+# SSL issuance.
+_missing=""
+for _bin in certbot nginx sqlite3 jq curl wget openssl fuser; do
+    command -v "$_bin" >/dev/null 2>&1 || _missing="$_missing $_bin"
+done
+if [[ -n "$_missing" ]]; then
+    msg_err "Missing required tool(s):$_missing"
+    msg_err "Auto-install failed. Install them manually and re-run, e.g.:"
+    msg_err "  apt-get update && apt-get install -y nginx-full certbot python3-certbot-nginx sqlite3 jq curl wget openssl psmisc"
+    exit 1
 fi
-systemctl stop nginx
+
+systemctl stop nginx 2>/dev/null
 fuser -k 80/tcp 80/udp 443/tcp 443/udp 2>/dev/null
 
 ############################### SERVER IP DETECTION #############################################
@@ -1233,7 +1256,7 @@ if systemctl is-active --quiet x-ui; then
     msg_inf  ' |_____/|_| |_|\__,_|_| |_|\__,_|_|   |____/ '
     echo
     msg_cyan ' ┌──────────────────────────────────────────────────────────┐'
-    msg_cyan ' │   Netch Solutions  ·  VPN Installer v1.2.0               │'
+    msg_cyan ' │   Netch Solutions  ·  VPN Installer v1.2.1               │'
     msg_cyan ' │   Installation Complete!                                  │'
     msg_cyan ' └──────────────────────────────────────────────────────────┘'
     echo

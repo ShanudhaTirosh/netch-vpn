@@ -4,6 +4,18 @@ All notable changes to **NovaNetchX VPN Installer** are documented here.
 
 ---
 
+## [1.2.1] — 2026-06
+
+### Fixed
+- **`certbot: command not found`** on a plain run: core dependencies
+  (`certbot`, `nginx-full`, `python3-certbot-nginx`, `sqlite3`, `jq`, `psmisc`
+  for `fuser`, `netcat-openbsd`, `openssl`) are now installed **unconditionally**
+  (idempotent) instead of only under `-install y`, with a hard preflight that
+  aborts with a clear message if any required tool is still missing.
+- Start banner version string corrected (was still `v1.0.0`).
+
+---
+
 ## [1.2.0] — 2026-06
 
 ### Security
