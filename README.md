@@ -104,6 +104,7 @@ CONTRIBUTING.md                    # contribution + local-lint guide
 assets/
   favicon.svg / favicon.ico        # real NovaNetchX brand mark (navy/teal)
   brand/SHANUTECHX.png / .jpg       # full brand logo (ShanuTechX)
+  netch-theme.css                  # panel glass/brand theme (Nginx-injected)
   randomfakehtml.sh                # generic camouflage decoy generator
   sub-page.html                    # static sub landing (glass)   -> -websub 0
   sub-page-classic.html            # static sub landing (classic) -> -websub 1
@@ -135,13 +136,14 @@ panel-theme/                       # 3x-ui frontend overlay (glass + brand token
 | `--netch-accent` | `#289DB7` |
 | `--netch-slate` | `#2B2D38` |
 
-The panel theme (teal `colorPrimary` + glassmorphism cards) is applied in the
-3x-ui frontend via `ConfigProvider` tokens and `page-shell.css` /
-`page-cards.css`. Those edits ship as a build-from-source overlay in
-[`panel-theme/`](panel-theme/) (run `panel-theme/apply.sh` against a 3x-ui
-checkout, then rebuild). The sub page and favicon use the same tokens for a
-single visual identity; the favicon is injected into the stock panel at the
-Nginx layer, so it needs no rebuild.
+The panel theme (teal `colorPrimary` + glassmorphism cards) applies to the
+**stock prebuilt 3x-ui** automatically: `install.sh` deploys
+[`assets/netch-theme.css`](assets/netch-theme.css) and injects it into the SPA
+via the same Nginx `sub_filter` as the favicon (navy glass surfaces + teal AntD
+v6 primary via CSS variables) — no source rebuild needed. For a compiled-in
+version, [`panel-theme/`](panel-theme/) holds the matching frontend overlay
+(`apply.sh` against a 3x-ui checkout). The sub page and favicon use the same
+tokens for one visual identity.
 
 ---
 

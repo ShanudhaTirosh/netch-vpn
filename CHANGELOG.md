@@ -4,6 +4,19 @@ All notable changes to **NovaNetchX VPN Installer** are documented here.
 
 ---
 
+## [1.2.2] — 2026-06
+
+### Fixed
+- **Panel UI theme now actually applies** on the stock prebuilt 3x-ui binary.
+  Previously only the favicon/inbounds changed because the installer uses the
+  official release (stock React bundle) — the glass/teal theme lived only in the
+  `panel-theme/` source overlay. Now a brand stylesheet (`assets/netch-theme.css`)
+  is injected into the SPA via the same Nginx `sub_filter` as the favicon:
+  navy glassmorphism surfaces + teal AntD primary (AntD v6 CSS variables), no
+  source rebuild required. `panel-theme/` remains for compiled-in builds.
+
+---
+
 ## [1.2.1] — 2026-06
 
 ### Fixed

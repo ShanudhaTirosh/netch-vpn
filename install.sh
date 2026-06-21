@@ -1,6 +1,6 @@
 #!/bin/bash
 ##########################################################################
-#  Netch VPN / NovaNetchX Installer  v1.2.1
+#  Netch VPN / NovaNetchX Installer  v1.2.2
 #  Developer  : ShanuFX  (github.com/ShanudhaTirosh)
 #  Company    : Netch Solutions  (netchsolutions.com)
 #  Repository : github.com/ShanudhaTirosh/netch-vpn
@@ -9,8 +9,12 @@
 #               3x-ui Panel by MHSanaei (github.com/MHSanaei/3x-ui)
 #               sub2sing-box by legiz-ru (github.com/legiz-ru/sub2sing-box)
 ##########################################################################
-#  CHANGELOG  (v1.1.0 -> v1.2.1)
+#  CHANGELOG  (v1.1.0 -> v1.2.2)
 #  ----------
+#  [v1.2.2]    Panel UI theme now applies to the STOCK prebuilt 3x-ui without a
+#              source rebuild: a brand glassmorphism stylesheet (netch-theme.css)
+#              is injected into the SPA via the same Nginx sub_filter as the
+#              favicon (navy glass surfaces + teal AntD primary via CSS vars).
 #  [v1.2.1]    Fix: core deps (certbot/nginx/sqlite3/fuser) are now installed
 #              UNCONDITIONALLY with a hard preflight, instead of only under
 #              "-install y" — fixes "certbot: command not found" on plain runs.
@@ -64,7 +68,7 @@ msg_inf  '  ____) | | | | (_| | | | | |_| | |   | |__/ / / /'
 msg_inf  ' |_____/|_| |_|\\__,_|_| |_|\\__,_|_|   |_____/_/_/ '
 echo
 msg_cyan ' ┌──────────────────────────────────────────────────────────┐'
-msg_cyan ' │   ShanuFX VPN Installer  v1.2.1                         │'
+msg_cyan ' │   ShanuFX VPN Installer  v1.2.2                         │'
 msg_cyan ' │   Powered by Netch Solutions  ·  netchsolutions.com      │'
 msg_cyan ' │   github.com/ShanudhaTirosh/netch-vpn                          │'
 msg_cyan ' └──────────────────────────────────────────────────────────┘'
@@ -444,7 +448,7 @@ server {
 		proxy_send_timeout 3600s;
 		proxy_pass https://127.0.0.1:${panel_port};
 		sub_filter_types text/html;
-		sub_filter '</head>' '<link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"></head>';
+		sub_filter '</head>' '<link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"><link rel="stylesheet" href="/netch-theme.css"></head>';
 		sub_filter_once on;
 		break;
 	}
@@ -463,7 +467,7 @@ server {
 		proxy_send_timeout 3600s;
 		proxy_pass https://127.0.0.1:${panel_port};
 		sub_filter_types text/html;
-		sub_filter '</head>' '<link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"></head>';
+		sub_filter '</head>' '<link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"><link rel="stylesheet" href="/netch-theme.css"></head>';
 		sub_filter_once on;
 		break;
 	}
@@ -1228,6 +1232,18 @@ SVGEOF
 fi
 # ─────────────────────────────────────────────────────────────────────────────
 
+############################### PANEL THEME (CSS injection) ###################################
+# Deploy the brand glassmorphism stylesheet that Nginx sub_filter injects into
+# the stock 3x-ui SPA (the official prebuilt binary, so no source rebuild). The
+# <link> to /netch-theme.css is added to the panel vhost's sub_filter above.
+if curl -sf --max-time 8 "${GITHUB_RAW}/assets/netch-theme.css" -o /var/www/html/netch-theme.css 2>/dev/null; then
+    chmod 644 /var/www/html/netch-theme.css
+    msg_ok "Panel theme CSS deployed (glassmorphism + teal brand)"
+else
+    msg_inf "  Could not fetch netch-theme.css from repo — panel keeps stock theme"
+    msg_inf "  (favicon + functionality unaffected). Add assets/netch-theme.css to the repo."
+fi
+
 nginx -s reload 2>/dev/null || true
 
 ############################### CRON JOBS #######################################################
@@ -1256,7 +1272,7 @@ if systemctl is-active --quiet x-ui; then
     msg_inf  ' |_____/|_| |_|\__,_|_| |_|\__,_|_|   |____/ '
     echo
     msg_cyan ' ┌──────────────────────────────────────────────────────────┐'
-    msg_cyan ' │   Netch Solutions  ·  VPN Installer v1.2.1               │'
+    msg_cyan ' │   Netch Solutions  ·  VPN Installer v1.2.2               │'
     msg_cyan ' │   Installation Complete!                                  │'
     msg_cyan ' └──────────────────────────────────────────────────────────┘'
     echo

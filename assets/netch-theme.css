@@ -1,0 +1,97 @@
+/* ==========================================================================
+   Netch VPN / NovaNetchX — panel theme injection
+   Injected into the stock 3x-ui SPA via Nginx sub_filter (before </head>), so
+   the official prebuilt panel gets the glassmorphism + brand look WITHOUT a
+   source rebuild. Brand: navy #03061D/#02051D, teal #289DB7, slate #2B2D38.
+   For a compiled-in version of this theme, use panel-theme/ instead.
+   ========================================================================== */
+
+:root {
+  --netch-accent: #289DB7;
+  --netch-accent-hi: #3FC9E6;
+  --netch-accent-lo: #1F7E93;
+}
+
+/* AntD v6 ships CSS variables by default — recolor the whole design system's
+   primary/link/info to teal in one shot. */
+:root,
+body,
+body.dark,
+.ant-app {
+  --ant-color-primary: var(--netch-accent) !important;
+  --ant-color-primary-hover: var(--netch-accent-hi) !important;
+  --ant-color-primary-active: var(--netch-accent-lo) !important;
+  --ant-color-primary-bg: rgba(40, 157, 183, 0.16) !important;
+  --ant-color-primary-bg-hover: rgba(40, 157, 183, 0.24) !important;
+  --ant-color-primary-border: rgba(40, 157, 183, 0.45) !important;
+  --ant-color-primary-border-hover: var(--netch-accent) !important;
+  --ant-color-primary-text: var(--netch-accent) !important;
+  --ant-color-primary-text-hover: var(--netch-accent-hi) !important;
+  --ant-color-info: var(--netch-accent) !important;
+  --ant-color-link: var(--netch-accent) !important;
+  --ant-color-link-hover: var(--netch-accent-hi) !important;
+}
+
+/* Brand navy canvas — override the upstream per-page background variables. */
+.index-page.is-dark, .clients-page.is-dark, .inbounds-page.is-dark, .xray-page.is-dark,
+.settings-page.is-dark, .nodes-page.is-dark, .groups-page.is-dark, .api-docs-page.is-dark,
+.hosts-page.is-dark, .login-page.is-dark {
+  --bg-page:
+    radial-gradient(900px 600px at 12% -8%, rgba(40, 157, 183, 0.16), transparent 60%),
+    radial-gradient(800px 700px at 110% 6%, rgba(72, 123, 215, 0.12), transparent 55%),
+    linear-gradient(160deg, #03061d 0%, #02051d 100%) !important;
+  --bg-card: rgba(20, 26, 54, 0.55) !important;
+  background-attachment: fixed;
+}
+.index-page.is-dark.is-ultra, .clients-page.is-dark.is-ultra, .inbounds-page.is-dark.is-ultra,
+.xray-page.is-dark.is-ultra, .settings-page.is-dark.is-ultra, .nodes-page.is-dark.is-ultra,
+.groups-page.is-dark.is-ultra, .api-docs-page.is-dark.is-ultra, .hosts-page.is-dark.is-ultra {
+  --bg-page:
+    radial-gradient(900px 600px at 12% -8%, rgba(40, 157, 183, 0.12), transparent 60%),
+    linear-gradient(160deg, #010207 0%, #000 100%) !important;
+  --bg-card: rgba(10, 14, 34, 0.62) !important;
+}
+
+/* Also paint the body so the login page and any unclassed area sit on navy. */
+body.dark {
+  background:
+    radial-gradient(900px 600px at 12% -8%, rgba(40, 157, 183, 0.16), transparent 60%),
+    radial-gradient(800px 700px at 110% 6%, rgba(72, 123, 215, 0.12), transparent 55%),
+    linear-gradient(160deg, #03061d 0%, #02051d 100%) !important;
+  background-attachment: fixed !important;
+}
+
+/* Glassmorphism on the main surfaces. */
+body.dark .ant-card,
+body.dark .content-shell,
+body.dark .ant-modal-content,
+body.dark .ant-drawer-content,
+body.dark .ant-popover-inner,
+body.dark .ant-dropdown-menu,
+body.dark .ant-layout-sider,
+body.dark .ant-layout-header {
+  background: var(--bg-card, rgba(20, 26, 54, 0.55)) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(40, 157, 183, 0.18) !important;
+}
+body.dark .ant-layout,
+body.dark .ant-layout-content {
+  background: transparent !important;
+}
+
+/* Fallback recolour for the most visible accents in case cssVar is disabled. */
+.ant-btn-primary { background-color: var(--netch-accent) !important; border-color: var(--netch-accent) !important; }
+.ant-btn-primary:hover { background-color: var(--netch-accent-hi) !important; border-color: var(--netch-accent-hi) !important; }
+.ant-switch-checked { background: var(--netch-accent) !important; }
+.ant-tabs-ink-bar { background: var(--netch-accent) !important; }
+.ant-menu-item-selected { color: var(--netch-accent) !important; }
+.ant-pagination-item-active { border-color: var(--netch-accent) !important; }
+.ant-pagination-item-active a { color: var(--netch-accent) !important; }
+
+/* Graceful fallback when backdrop-filter is unsupported. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  body.dark .ant-card,
+  body.dark .ant-layout-sider,
+  body.dark .ant-layout-header { background: #0d1230 !important; }
+}
