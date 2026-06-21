@@ -40,7 +40,7 @@ body.dark,
 body.dark .ant-app {
   --ant-color-bg-container: rgba(18, 24, 50, 0.66) !important;   /* inputs, default buttons, selects, cards, cells */
   --ant-color-bg-container-disabled: rgba(255, 255, 255, 0.04) !important;
-  --ant-color-bg-elevated: rgba(10, 14, 34, 0.97) !important;    /* modals, drawers, dropdowns, popovers, tooltips, pickers */
+  --ant-color-bg-elevated: rgba(24, 31, 64, 0.94) !important;    /* modals, drawers, dropdowns, popovers, tooltips, pickers */
   --ant-color-bg-layout: transparent !important;                 /* let the page navy gradient show through */
   --ant-color-bg-spotlight: rgba(10, 14, 34, 0.97) !important;
   --ant-color-bg-mask: rgba(2, 5, 15, 0.62) !important;
@@ -165,13 +165,13 @@ body.dark .ant-modal-confirm .ant-modal-content {
   /* Same navy radial-glow gradient + glass as .ant-card, so popups read as
      glass cards floating on the canvas rather than flat dark boxes. */
   background:
-    radial-gradient(700px 420px at 12% -12%, rgba(40, 157, 183, 0.16), transparent 60%),
-    radial-gradient(620px 520px at 112% 0%, rgba(72, 123, 215, 0.12), transparent 55%),
-    linear-gradient(160deg, rgba(11, 16, 42, 0.96) 0%, rgba(4, 7, 26, 0.97) 100%) !important;
-  backdrop-filter: blur(24px) saturate(165%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(165%) !important;
-  border: 1px solid rgba(40, 157, 183, 0.22) !important;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    radial-gradient(720px 380px at 50% -12%, rgba(40, 157, 183, 0.30), transparent 60%),
+    radial-gradient(560px 460px at 115% 8%, rgba(72, 123, 215, 0.16), transparent 55%),
+    linear-gradient(160deg, rgba(30, 39, 78, 0.88) 0%, rgba(15, 21, 48, 0.92) 100%) !important;
+  backdrop-filter: blur(26px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(170%) !important;
+  border: 1px solid rgba(40, 157, 183, 0.30) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
 }
 /* Blend header/body/footer into the glass instead of separate dark bars. */
 body.dark .ant-modal-header,
@@ -183,8 +183,8 @@ body.dark .ant-modal-header, body.dark .ant-drawer-header { border-bottom: 1px s
 body.dark .ant-modal-footer { border-top: 1px solid rgba(40, 157, 183, 0.14) !important; }
 body.dark .ant-modal-title, body.dark .ant-drawer-title { color: #f4f7fb !important; }
 body.dark .ant-modal-mask, body.dark .ant-drawer-mask {
-  background: rgba(2, 5, 15, 0.62) !important;
-  backdrop-filter: blur(3px);
+  background: rgba(3, 7, 26, 0.50) !important;
+  backdrop-filter: blur(4px);
 }
 body.dark .ant-modal .ant-tabs-tab-active .ant-tabs-tab-btn,
 body.dark .ant-drawer .ant-tabs-tab-active .ant-tabs-tab-btn { color: var(--netch-accent) !important; }
