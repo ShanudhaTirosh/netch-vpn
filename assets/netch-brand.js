@@ -35,8 +35,27 @@
     RE.lastIndex = 0;
   }
 
+  // Repoint the footer "GitHub / vX.Y.Z" link (and any other upstream link)
+  // from MHSanaei/3x-ui to the Netch repo. Only rewrites matching anchors.
+  var NETCH_REPO = "https://github.com/ShanudhaTirosh/netch-vpn";
+  function rebrandLinks(root) {
+    var as = root.querySelectorAll(
+      'a[href*="MHSanaei/3x-ui"], a[href*="github.com/MHSanaei"], a[href*="/3x-ui/"]'
+    );
+    for (var i = 0; i < as.length; i++) {
+      if (as[i].getAttribute("href") !== NETCH_REPO) {
+        as[i].setAttribute("href", NETCH_REPO);
+        as[i].setAttribute("title", "SX-UI by Netch Solutions");
+      }
+    }
+  }
+
   function run() {
-    try { rebrandTextNodes(document.body); rebrandTitle(); } catch (e) { /* ignore */ }
+    try {
+      rebrandTextNodes(document.body);
+      rebrandTitle();
+      rebrandLinks(document.body);
+    } catch (e) { /* ignore */ }
   }
 
   function start() {

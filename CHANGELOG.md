@@ -9,7 +9,8 @@ All notable changes to **NovaNetchX VPN Installer** are documented here.
 ### Added
 - **Runtime rebrand** `3X-UI → SX-UI` across the panel (sidebar, titles, login)
   via an injected script (`assets/netch-brand.js`) — text nodes only, link
-  hrefs left intact, re-applied after React re-renders.
+  hrefs left intact, re-applied after React re-renders. The footer GitHub/version
+  link is repointed from `MHSanaei/3x-ui` to the Netch repo.
 
 ### Fixed
 - **Panel UI theme now actually applies** on the stock prebuilt 3x-ui binary.
