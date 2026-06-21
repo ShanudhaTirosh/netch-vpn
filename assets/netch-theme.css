@@ -95,3 +95,45 @@ body.dark .ant-layout-content {
   body.dark .ant-layout-sider,
   body.dark .ant-layout-header { background: #0d1230 !important; }
 }
+
+/* ---- Sidebar / menu / header (the parts that still looked stock) ---------- */
+body.dark .ant-layout-sider,
+body.dark .ant-menu.ant-menu-dark,
+body.dark .ant-menu-dark .ant-menu-sub,
+body.dark .ant-layout-sider-trigger {
+  background: linear-gradient(180deg, rgba(8, 12, 34, 0.92), rgba(3, 6, 29, 0.92)) !important;
+  border-right: 1px solid rgba(40, 157, 183, 0.15) !important;
+}
+body.dark .ant-menu-dark .ant-menu-item-selected {
+  background: linear-gradient(90deg, rgba(40, 157, 183, 0.30), rgba(40, 157, 183, 0.10)) !important;
+  color: #fff !important;
+  box-shadow: inset 3px 0 0 var(--netch-accent);
+}
+body.dark .ant-menu-dark .ant-menu-item-selected .anticon,
+body.dark .ant-menu-dark .ant-menu-item:hover .anticon,
+body.dark .ant-menu-dark .ant-menu-item:hover { color: var(--netch-accent-hi) !important; }
+
+/* The sidebar brand header bar ("SX-UI" + theme toggles). */
+body.dark .ant-layout-sider .ant-layout-header,
+body.dark .ant-layout-header {
+  background: rgba(3, 6, 29, 0.85) !important;
+  border-bottom: 1px solid rgba(40, 157, 183, 0.15) !important;
+}
+
+/* Login screen: keep the card glassy and centred on the navy canvas. */
+body.dark .login-page,
+body.dark .login-page .ant-layout,
+body.dark .login-page .ant-layout-content { background: transparent !important; }
+
+/* Inputs/segmented on glass. */
+body.dark .ant-input, body.dark .ant-input-affix-wrapper,
+body.dark .ant-input-number, body.dark .ant-select-selector,
+body.dark .ant-segmented {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(255, 255, 255, 0.10) !important;
+}
+body.dark .ant-input:focus, body.dark .ant-input-affix-wrapper-focused,
+body.dark .ant-select-focused .ant-select-selector {
+  border-color: var(--netch-accent) !important;
+  box-shadow: 0 0 0 2px rgba(40, 157, 183, 0.20) !important;
+}

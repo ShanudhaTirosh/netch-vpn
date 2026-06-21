@@ -447,8 +447,7 @@ server {
 		proxy_read_timeout 3600s;
 		proxy_send_timeout 3600s;
 		proxy_pass https://127.0.0.1:${panel_port};
-		sub_filter_types text/html;
-		sub_filter '</head>' '<link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"><link rel="stylesheet" href="/netch-theme.css"></head>';
+		sub_filter '</head>' '<link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"><link rel="stylesheet" href="/netch-theme.css"><script src="/netch-brand.js" defer></script></head>';
 		sub_filter_once on;
 		break;
 	}
@@ -466,8 +465,7 @@ server {
 		proxy_read_timeout 3600s;
 		proxy_send_timeout 3600s;
 		proxy_pass https://127.0.0.1:${panel_port};
-		sub_filter_types text/html;
-		sub_filter '</head>' '<link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"><link rel="stylesheet" href="/netch-theme.css"></head>';
+		sub_filter '</head>' '<link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"><link rel="stylesheet" href="/netch-theme.css"><script src="/netch-brand.js" defer></script></head>';
 		sub_filter_once on;
 		break;
 	}
@@ -1242,6 +1240,14 @@ if curl -sf --max-time 8 "${GITHUB_RAW}/assets/netch-theme.css" -o /var/www/html
 else
     msg_inf "  Could not fetch netch-theme.css from repo — panel keeps stock theme"
     msg_inf "  (favicon + functionality unaffected). Add assets/netch-theme.css to the repo."
+fi
+
+# Runtime rebrand: 3X-UI -> SX-UI in the SPA (text nodes only; injected too).
+if curl -sf --max-time 8 "${GITHUB_RAW}/assets/netch-brand.js" -o /var/www/html/netch-brand.js 2>/dev/null; then
+    chmod 644 /var/www/html/netch-brand.js
+    msg_ok "Panel rebrand script deployed (3X-UI -> SX-UI)"
+else
+    msg_inf "  Could not fetch netch-brand.js from repo — panel keeps stock 3X-UI label"
 fi
 
 nginx -s reload 2>/dev/null || true

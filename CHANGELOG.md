@@ -6,6 +6,11 @@ All notable changes to **NovaNetchX VPN Installer** are documented here.
 
 ## [1.2.2] — 2026-06
 
+### Added
+- **Runtime rebrand** `3X-UI → SX-UI` across the panel (sidebar, titles, login)
+  via an injected script (`assets/netch-brand.js`) — text nodes only, link
+  hrefs left intact, re-applied after React re-renders.
+
 ### Fixed
 - **Panel UI theme now actually applies** on the stock prebuilt 3x-ui binary.
   Previously only the favicon/inbounds changed because the installer uses the
@@ -14,6 +19,9 @@ All notable changes to **NovaNetchX VPN Installer** are documented here.
   is injected into the SPA via the same Nginx `sub_filter` as the favicon:
   navy glassmorphism surfaces + teal AntD primary (AntD v6 CSS variables), no
   source rebuild required. `panel-theme/` remains for compiled-in builds.
+- Themed the parts that still looked stock — **sidebar, menu, header, inputs**
+  and the **login screen** — and removed a redundant `sub_filter_types` line
+  that produced a harmless `duplicate MIME type` nginx warning.
 
 ---
 
