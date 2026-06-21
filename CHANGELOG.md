@@ -7,9 +7,11 @@ All notable changes to **NovaNetchX VPN Installer** are documented here.
 ## [1.2.3] — 2026-06
 
 ### Added
-- Glass-themed **modals, drawers and popups** (e.g. Add Inbound, settings
-  dialogs), navy **tables** (headers/rows/sticky columns) and themed
-  **select/date dropdowns** — popups now match the panel UI/UX.
+- Every panel surface now matches the glass theme: **inputs, selects,
+  dropdowns, date pickers, default buttons, checkboxes, modals, drawers and
+  tables** are recoloured to navy by overriding AntD v6's surface/fill/border
+  CSS variables (dark mode only). Fixes the near-black form fields and popups
+  (Edit Client, Add Node, Outbounds, Outbound Subscriptions, WARP, Nord, etc.).
 
 ### Changed
 - Footer GitHub/version link repointed to the Netch repo.

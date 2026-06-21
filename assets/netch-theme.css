@@ -32,6 +32,26 @@ body.dark,
   --ant-color-link-hover: var(--netch-accent-hi) !important;
 }
 
+/* Dark-only: recolour AntD's surface/fill/border CSS variables to navy so EVERY
+   component (inputs, selects, dropdowns, default buttons, modals, drawers,
+   tables, checkboxes, date pickers) matches the glass theme instead of the
+   stock near-black. Scoped to body.dark so light mode is untouched. */
+body.dark,
+body.dark .ant-app {
+  --ant-color-bg-container: rgba(18, 24, 50, 0.66) !important;   /* inputs, default buttons, selects, cards, cells */
+  --ant-color-bg-container-disabled: rgba(255, 255, 255, 0.04) !important;
+  --ant-color-bg-elevated: rgba(10, 14, 34, 0.97) !important;    /* modals, drawers, dropdowns, popovers, tooltips, pickers */
+  --ant-color-bg-layout: transparent !important;                 /* let the page navy gradient show through */
+  --ant-color-bg-spotlight: rgba(10, 14, 34, 0.97) !important;
+  --ant-color-bg-mask: rgba(2, 5, 15, 0.62) !important;
+  --ant-color-fill: rgba(255, 255, 255, 0.10) !important;
+  --ant-color-fill-secondary: rgba(255, 255, 255, 0.08) !important;
+  --ant-color-fill-tertiary: rgba(255, 255, 255, 0.06) !important;
+  --ant-color-fill-quaternary: rgba(255, 255, 255, 0.04) !important;
+  --ant-color-border: rgba(255, 255, 255, 0.14) !important;
+  --ant-color-border-secondary: rgba(255, 255, 255, 0.08) !important;
+}
+
 /* Brand navy canvas — override the upstream per-page background variables. */
 .index-page.is-dark, .clients-page.is-dark, .inbounds-page.is-dark, .xray-page.is-dark,
 .settings-page.is-dark, .nodes-page.is-dark, .groups-page.is-dark, .api-docs-page.is-dark,
