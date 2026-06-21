@@ -1,6 +1,6 @@
 #!/bin/bash
 ##########################################################################
-#  Netch VPN / NovaNetchX Installer  v1.2.3
+#  Netch VPN / NovaNetchX Installer  v1.2.4
 #  Developer  : ShanuFX  (github.com/ShanudhaTirosh)
 #  Company    : Netch Solutions  (netchsolutions.com)
 #  Repository : github.com/ShanudhaTirosh/netch-vpn
@@ -9,8 +9,11 @@
 #               3x-ui Panel by MHSanaei (github.com/MHSanaei/3x-ui)
 #               sub2sing-box by legiz-ru (github.com/legiz-ru/sub2sing-box)
 ##########################################################################
-#  CHANGELOG  (v1.1.0 -> v1.2.3)
+#  CHANGELOG  (v1.1.0 -> v1.2.4)
 #  ----------
+#  [v1.2.4]    Theme + rebrand now also applied to the REALITY-domain panel
+#              vhost (:9443) — it previously served the stock UI and proxied the
+#              panel over http (panel is https); now https + sub_filter injection.
 #  [v1.2.3]    Theme polish: glass-themed modals/drawers/popups, navy tables,
 #              themed select/date dropdowns; footer GitHub/version link repointed
 #              to the Netch repo; donation/sponsor heart icon removed.
@@ -71,7 +74,7 @@ msg_inf  '  ____) | | | | (_| | | | | |_| | |   | |__/ / / /'
 msg_inf  ' |_____/|_| |_|\\__,_|_| |_|\\__,_|_|   |_____/_/_/ '
 echo
 msg_cyan ' ┌──────────────────────────────────────────────────────────┐'
-msg_cyan ' │   ShanuFX VPN Installer  v1.2.3                         │'
+msg_cyan ' │   ShanuFX VPN Installer  v1.2.4                         │'
 msg_cyan ' │   Powered by Netch Solutions  ·  netchsolutions.com      │'
 msg_cyan ' │   github.com/ShanudhaTirosh/netch-vpn                          │'
 msg_cyan ' └──────────────────────────────────────────────────────────┘'
@@ -641,21 +644,37 @@ server {
 	error_page 400 401 402 403 500 501 502 503 504 =404 /404;
 	proxy_intercept_errors on;
 
-	# ShanuFX — X-UI Admin Panel (Reality domain)
+	# SX-UI Admin Panel (Reality domain) — themed + rebranded, same as main vhost
 	location /${panel_path}/ {
-		proxy_redirect off;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade \$http_upgrade;
+		proxy_set_header Connection "upgrade";
 		proxy_set_header Host \$host;
 		proxy_set_header X-Real-IP \$remote_addr;
 		proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-		proxy_pass http://127.0.0.1:${panel_port};
+		proxy_set_header X-Forwarded-Proto https;
+		proxy_set_header Accept-Encoding "";
+		proxy_read_timeout 3600s;
+		proxy_send_timeout 3600s;
+		proxy_pass https://127.0.0.1:${panel_port};
+		sub_filter '</head>' '<link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"><link rel="stylesheet" href="/netch-theme.css"><script src="/netch-brand.js" defer></script></head>';
+		sub_filter_once on;
 		break;
 	}
 	location /$panel_path {
-		proxy_redirect off;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade \$http_upgrade;
+		proxy_set_header Connection "upgrade";
 		proxy_set_header Host \$host;
 		proxy_set_header X-Real-IP \$remote_addr;
 		proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-		proxy_pass http://127.0.0.1:${panel_port};
+		proxy_set_header X-Forwarded-Proto https;
+		proxy_set_header Accept-Encoding "";
+		proxy_read_timeout 3600s;
+		proxy_send_timeout 3600s;
+		proxy_pass https://127.0.0.1:${panel_port};
+		sub_filter '</head>' '<link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"><link rel="stylesheet" href="/netch-theme.css"><script src="/netch-brand.js" defer></script></head>';
+		sub_filter_once on;
 		break;
 	}
 	include /etc/nginx/snippets/includes.conf;
@@ -1281,7 +1300,7 @@ if systemctl is-active --quiet x-ui; then
     msg_inf  ' |_____/|_| |_|\__,_|_| |_|\__,_|_|   |____/ '
     echo
     msg_cyan ' ┌──────────────────────────────────────────────────────────┐'
-    msg_cyan ' │   Netch Solutions  ·  VPN Installer v1.2.3               │'
+    msg_cyan ' │   Netch Solutions  ·  VPN Installer v1.2.4               │'
     msg_cyan ' │   Installation Complete!                                  │'
     msg_cyan ' └──────────────────────────────────────────────────────────┘'
     echo

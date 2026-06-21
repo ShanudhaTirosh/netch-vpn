@@ -4,6 +4,18 @@ All notable changes to **NovaNetchX VPN Installer** are documented here.
 
 ---
 
+## [1.2.4] — 2026-06
+
+### Changed
+- The panel **theme + SX-UI rebrand** are now also injected on the
+  **REALITY-domain vhost (:9443)** panel path, not just the main panel domain.
+  That vhost previously served the stock UI and proxied the panel over `http`
+  (the panel serves `https`); it now uses `https` + the same `sub_filter`
+  injection, so the panel looks identical regardless of which domain it's
+  opened from.
+
+---
+
 ## [1.2.3] — 2026-06
 
 ### Added
