@@ -1,0 +1,31 @@
+MIT License
+
+Copyright (c) 2026 ShanuFX / Netch Solutions
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---------------------------------------------------------------------------
+NOTICE — third-party components
+
+This repository's own scripts and templates are MIT-licensed as above. It does
+NOT bundle the 3x-ui panel: install.sh downloads official 3x-ui release
+binaries at install time. 3x-ui is licensed under GPL-3.0 by MHSanaei
+(https://github.com/MHSanaei/3x-ui). sub2sing-box (legiz-ru) and the x-ui-pro
+installer lineage (GFW4Fun) retain their respective licenses. Respect those
+licenses when redistributing.

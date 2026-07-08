@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+  Netch VPN — static subscription landing (classic / light).
+  Same install.sh token wiring as sub-page.html (${DOMAIN} / ${SUB_PATH} /
+  ${SUB_JSON_PATH}, sub.legiz.ru). Minimal, dependency-light alternative for
+  CUSTOMWEBSUB=1.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Netch VPN · Subscription</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" defer></script>
+<style>
+  :root{--accent:#289DB7;--ink:#10162b;--muted:#5b6478;--line:#e3e8f0}
+  *{box-sizing:border-box;margin:0} body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:#f4f6fb;color:var(--ink);min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;max-width:560px;width:100%;
+    padding:28px;box-shadow:0 10px 30px rgba(16,22,43,.06)}
+  .top{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(150deg,#03061D,#2B2D38);
+    color:var(--accent);display:grid;place-items:center;font-weight:900;font-family:"Arial Black",Arial;font-size:22px}
+  h1{font-size:20px} .sub{color:var(--muted);font-size:13px}
+  label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:0 0 6px}
+  input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px}
+  input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(40,157,183,.15)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  button,a.btn{cursor:pointer;text-decoration:none;border:1px solid var(--line);background:#fff;color:var(--ink);
+    border-radius:10px;padding:11px 16px;font-size:14px;font-weight:600;flex:1;text-align:center}
+  button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .uri{margin-top:14px;font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted);
+    word-break:break-all;background:#f7f9fc;border:1px solid var(--line);border-radius:8px;padding:10px}
+  #qrbox{text-align:center;margin-top:16px}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .25s}
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="top">
+      <div class="logo">N</div>
+      <div><h1>Netch VPN</h1><div class="sub">Subscription portal</div></div>
+    </div>
+    <label for="name">Subscription name</label>
+    <input id="name" placeholder="your-client-name" autocomplete="off" spellcheck="false">
+    <div class="row">
+      <button class="primary" id="copySub">Copy link</button>
+      <a class="btn" id="singbox" href="#">sing-box</a>
+      <a class="btn" id="clash" href="#">Clash</a>
+    </div>
+    <div class="uri" id="subUri">—</div>
+    <div id="qrbox"></div>
+  </div>
+  <div class="toast" id="toast"></div>
+<script>
+(function(){
+  "use strict";
+  var DOMAIN="${DOMAIN}", SUB_PATH="${SUB_PATH}", JSON_PATH="${SUB_JSON_PATH}", SUB2SB="sub.legiz.ru";
+  var n0=new URLSearchParams(location.search).get("name")||"";
+  var inp=document.getElementById("name"); inp.value=n0;
+  function sub(n){return "https://"+DOMAIN+"/"+SUB_PATH+"/"+encodeURIComponent(n);}
+  function js(n){return "https://"+DOMAIN+"/"+JSON_PATH+"/"+encodeURIComponent(n);}
+  function cl(n){return "https://"+SUB2SB+"/sub?target=clash&url="+encodeURIComponent(sub(n));}
+  function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove("show")},1600);}
+  function copy(x){navigator.clipboard&&window.isSecureContext?navigator.clipboard.writeText(x).then(function(){toast("Copied")}):toast(x);}
+  function render(){var n=(inp.value||"").trim();
+    document.getElementById("subUri").textContent=n?sub(n):"Enter a name above";
+    document.getElementById("singbox").href=n?("sing-box://import-remote-profile?url="+encodeURIComponent(js(n))):"#";
+    document.getElementById("clash").href=n?("clash://install-config?url="+encodeURIComponent(cl(n))):"#";
+    var b=document.getElementById("qrbox");b.innerHTML="";if(n&&window.QRCode)new QRCode(b,{text:sub(n),width:188,height:188,correctLevel:QRCode.CorrectLevel.M});}
+  inp.addEventListener("input",render);
+  document.getElementById("copySub").addEventListener("click",function(){var n=(inp.value||"").trim();n?copy(sub(n)):toast("Enter a name first");});
+  window.addEventListener("load",render);
+})();
+</script>
+</body>
+</html>
