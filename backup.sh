@@ -1,74 +1,185 @@
-#!/bin/bash
-##########################################################################
-#  Netch VPN — backup / restore
-#  Snapshots the stateful parts of a Netch VPN install so you can move to a
-#  new VPS or roll back: x-ui database, Nginx config, web/sub assets, the
-#  native sub template, and Let's Encrypt certs.
-#
-#  Usage:
-#    bash backup.sh backup [/path/out]     # create a snapshot tar.gz
-#    bash backup.sh restore <snapshot.tar.gz>
-#    bash backup.sh            # interactive menu
-##########################################################################
-set -euo pipefail
-[[ $EUID -ne 0 ]] && { echo "Run as root."; exit 1; }
-
-STAMP="$(date +%Y%m%d-%H%M%S)"
-OUT_DEFAULT="/root/netch-backup-${STAMP}.tar.gz"
-
-PATHS=(
-  /etc/x-ui
-  /etc/nginx/nginx.conf
-  /etc/nginx/sites-available
-  /etc/nginx/sites-enabled
-  /etc/nginx/stream-enabled
-  /etc/nginx/snippets
-  /var/www/html
-  /var/www/subpage
-  /etc/letsencrypt
-)
-
-do_backup() {
-  local out="${1:-$OUT_DEFAULT}"
-  echo "[*] Stopping x-ui for a consistent DB snapshot..."
-  systemctl stop x-ui 2>/dev/null || true
-  local existing=()
-  local p
-  for p in "${PATHS[@]}"; do [[ -e "$p" ]] && existing+=("$p"); done
-  echo "[*] Creating snapshot: $out"
-  tar --warning=no-file-changed -czf "$out" "${existing[@]}" 2>/dev/null || true
-  systemctl start x-ui 2>/dev/null || true
-  echo "[+] Backup complete: $out"
-  echo "    Size: $(du -h "$out" | cut -f1)"
+.index-page .ant-card,
+.clients-page .ant-card,
+.inbounds-page .ant-card,
+.xray-page .ant-card,
+.settings-page .ant-card,
+.nodes-page .ant-card,
+.groups-page .ant-card,
+.api-docs-page .ant-card {
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.2s ease;
 }
 
-do_restore() {
-  local snap="${1:-}"
-  [[ -z "$snap" || ! -f "$snap" ]] && { echo "Snapshot file not found: $snap"; exit 1; }
-  echo "[!] This overwrites x-ui DB, Nginx config and web assets from: $snap"
-  read -rp "Type YES to continue: " ok
-  [[ "$ok" == "YES" ]] || { echo "Aborted."; exit 1; }
-  systemctl stop x-ui 2>/dev/null || true
-  systemctl stop nginx 2>/dev/null || true
-  echo "[*] Extracting..."
-  tar -xzf "$snap" -C /
-  echo "[*] Testing Nginx config..."
-  if nginx -t; then systemctl start nginx; else echo "[!] nginx -t failed — fix before starting nginx."; fi
-  systemctl start x-ui 2>/dev/null || true
-  echo "[+] Restore complete. Verify the panel and 'x-ui status'."
+.index-page.is-dark .ant-card,
+.clients-page.is-dark .ant-card,
+.inbounds-page.is-dark .ant-card,
+.xray-page.is-dark .ant-card,
+.settings-page.is-dark .ant-card,
+.nodes-page.is-dark .ant-card,
+.groups-page.is-dark .ant-card,
+.api-docs-page.is-dark .ant-card {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
-case "${1:-menu}" in
-  backup)  do_backup "${2:-}";;
-  restore) do_restore "${2:-}";;
-  menu|*)
-    echo "Netch VPN backup/restore"
-    echo "  1) Backup now"
-    echo "  2) Restore from file"
-    read -rp "Select [1-2]: " c
-    case "$c" in
-      1) read -rp "Output path [$OUT_DEFAULT]: " o; do_backup "${o:-$OUT_DEFAULT}";;
-      2) read -rp "Snapshot path: " s; do_restore "$s";;
-      *) echo "Nothing to do.";;
-    esac;;
-esac
+.index-page.is-dark.is-ultra .ant-card,
+.clients-page.is-dark.is-ultra .ant-card,
+.inbounds-page.is-dark.is-ultra .ant-card,
+.xray-page.is-dark.is-ultra .ant-card,
+.settings-page.is-dark.is-ultra .ant-card,
+.nodes-page.is-dark.is-ultra .ant-card,
+.groups-page.is-dark.is-ultra .ant-card,
+.api-docs-page.is-dark.is-ultra .ant-card {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.index-page .ant-card.ant-card-hoverable:hover,
+.clients-page .ant-card.ant-card-hoverable:hover,
+.inbounds-page .ant-card.ant-card-hoverable:hover,
+.xray-page .ant-card.ant-card-hoverable:hover,
+.settings-page .ant-card.ant-card-hoverable:hover,
+.nodes-page .ant-card.ant-card-hoverable:hover,
+.groups-page .ant-card.ant-card-hoverable:hover,
+.api-docs-page .ant-card.ant-card-hoverable:hover {
+  cursor: default;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.index-page.is-dark .ant-card.ant-card-hoverable:hover,
+.clients-page.is-dark .ant-card.ant-card-hoverable:hover,
+.inbounds-page.is-dark .ant-card.ant-card-hoverable:hover,
+.xray-page.is-dark .ant-card.ant-card-hoverable:hover,
+.settings-page.is-dark .ant-card.ant-card-hoverable:hover,
+.nodes-page.is-dark .ant-card.ant-card-hoverable:hover,
+.groups-page.is-dark .ant-card.ant-card-hoverable:hover,
+.api-docs-page.is-dark .ant-card.ant-card-hoverable:hover {
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.index-page.is-dark.is-ultra .ant-card.ant-card-hoverable:hover,
+.clients-page.is-dark.is-ultra .ant-card.ant-card-hoverable:hover,
+.inbounds-page.is-dark.is-ultra .ant-card.ant-card-hoverable:hover,
+.xray-page.is-dark.is-ultra .ant-card.ant-card-hoverable:hover,
+.settings-page.is-dark.is-ultra .ant-card.ant-card-hoverable:hover,
+.nodes-page.is-dark.is-ultra .ant-card.ant-card-hoverable:hover,
+.groups-page.is-dark.is-ultra .ant-card.ant-card-hoverable:hover,
+.api-docs-page.is-dark.is-ultra .ant-card.ant-card-hoverable:hover {
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.index-page .ant-card .ant-card-actions,
+.clients-page .ant-card .ant-card-actions,
+.inbounds-page .ant-card .ant-card-actions,
+.xray-page .ant-card .ant-card-actions,
+.settings-page .ant-card .ant-card-actions,
+.nodes-page .ant-card .ant-card-actions,
+.groups-page .ant-card .ant-card-actions,
+.api-docs-page .ant-card .ant-card-actions {
+  background: transparent;
+}
+
+/* Hosts page shares the same card styling + hover shadows (without the default
+   antd hoverable pointer/blur), matching Clients/Inbounds/etc. */
+.hosts-page .ant-card {
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+}
+
+.hosts-page.is-dark .ant-card {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.hosts-page.is-dark.is-ultra .ant-card {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.hosts-page .ant-card.ant-card-hoverable:hover {
+  cursor: default;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.hosts-page.is-dark .ant-card.ant-card-hoverable:hover {
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.hosts-page.is-dark.is-ultra .ant-card.ant-card-hoverable:hover {
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.hosts-page .ant-card .ant-card-actions {
+  background: transparent;
+}
+
+/* ─── Netch glassmorphism (Step 3a) ──────────────────────────────────────────
+   Layers translucent navy + backdrop blur + a thin teal-tinted border on top of
+   the existing card system. Dark/ultra only — light mode keeps solid surfaces
+   for maximum legibility. --bg-card is the per-page translucent navy defined in
+   page-shell.css. */
+.index-page.is-dark .ant-card,
+.clients-page.is-dark .ant-card,
+.inbounds-page.is-dark .ant-card,
+.xray-page.is-dark .ant-card,
+.settings-page.is-dark .ant-card,
+.nodes-page.is-dark .ant-card,
+.groups-page.is-dark .ant-card,
+.api-docs-page.is-dark .ant-card,
+.hosts-page.is-dark .ant-card,
+.index-page.is-dark .content-shell,
+.clients-page.is-dark .content-shell,
+.inbounds-page.is-dark .content-shell,
+.xray-page.is-dark .content-shell,
+.settings-page.is-dark .content-shell,
+.nodes-page.is-dark .content-shell,
+.groups-page.is-dark .content-shell,
+.api-docs-page.is-dark .content-shell {
+  background: var(--bg-card);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(40, 157, 183, 0.18);
+}
+
+/* Slightly stronger separation on the ultra-dark canvas. */
+.index-page.is-dark.is-ultra .ant-card,
+.clients-page.is-dark.is-ultra .ant-card,
+.inbounds-page.is-dark.is-ultra .ant-card,
+.xray-page.is-dark.is-ultra .ant-card,
+.settings-page.is-dark.is-ultra .ant-card,
+.nodes-page.is-dark.is-ultra .ant-card,
+.groups-page.is-dark.is-ultra .ant-card,
+.api-docs-page.is-dark.is-ultra .ant-card,
+.hosts-page.is-dark.is-ultra .ant-card {
+  border-color: rgba(40, 157, 183, 0.14);
+}
+
+/* Graceful fallback: if the browser can't blur, fall back to a near-opaque
+   navy so text never sits on a see-through surface. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .index-page.is-dark .ant-card,
+  .clients-page.is-dark .ant-card,
+  .inbounds-page.is-dark .ant-card,
+  .xray-page.is-dark .ant-card,
+  .settings-page.is-dark .ant-card,
+  .nodes-page.is-dark .ant-card,
+  .groups-page.is-dark .ant-card,
+  .api-docs-page.is-dark .ant-card,
+  .hosts-page.is-dark .ant-card {
+    background: #0d1230;
+  }
+}

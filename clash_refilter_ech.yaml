@@ -1,0 +1,64 @@
+# Netch VPN — Clash / Mihomo (clash-meta) config.
+# install.sh substitutes ${DOMAIN} and ${SUB_PATH} into this file (its existing
+# sed wiring is preserved). Proxies are pulled live from your subscription via a
+# proxy-provider, so this file does not need per-node edits.
+#
+# NOTE (authored fresh for v1.2.0 — review before production): the original
+# netch-vpn-main/assets/clash/*.yaml were not present in the source provided,
+# so this is a sensible clash-meta baseline rather than a port of a prior file.
+
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: info
+ipv6: true
+external-controller: 127.0.0.1:9090
+
+dns:
+  enable: true
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  nameserver:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+  fallback:
+    - https://dns.google/dns-query
+    - tls://1.0.0.1:853
+
+proxy-providers:
+  netch:
+    type: http
+    # NOTE (verify before production): ${SUB_PATH} is the RAW subscription base.
+    # mihomo/clash-meta can parse a base64 v2ray subscription from it. For a
+    # clash-native feed instead, enable the panel Clash subscription
+    # (subClashEnable=true + a wired subClashPath) and point this URL there.
+    # Per-client feeds need the client's subId appended to the path.
+    url: "https://${DOMAIN}/${SUB_PATH}"
+    interval: 3600
+    path: ./providers/netch.yaml
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+
+proxy-groups:
+  - name: NETCH
+    type: select
+    use:
+      - netch
+    proxies:
+      - AUTO
+      - DIRECT
+  - name: AUTO
+    type: url-test
+    use:
+      - netch
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+
+rules:
+  - GEOIP,private,DIRECT,no-resolve
+  - GEOSITE,category-ads-all,REJECT
+  - MATCH,NETCH

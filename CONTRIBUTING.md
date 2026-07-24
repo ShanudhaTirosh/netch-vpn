@@ -1,40 +1,51 @@
-# Contributing
+# Panel theme overlay (glassmorphism + Netch brand)
 
-Thanks for helping improve Netch VPN.
+This folder holds the **only** 3x-ui frontend files Netch modifies, mirroring
+their upstream paths under `frontend/src/`. It is an *overlay*, not a fork — we
+don't vendor the GPL-licensed 3x-ui source here.
 
-## Ground rules
-
-- Stay close to upstream 3x-ui — this repo is installer/branding/automation, not
-  a panel fork. Don't vendor 3x-ui source here.
-- Keep shell scripts POSIX-friendly bash, `#!/bin/bash`, and **LF** line endings
-  (enforced by `.gitattributes`).
-- Never commit secrets, certs, or real credentials. CI runs gitleaks.
-
-## Local checks (mirror CI)
-
-```bash
-# ShellCheck (gate is error-severity; fix warnings where reasonable)
-shellcheck -x install.sh backup.sh scripts/*.sh assets/*.sh
-
-# HTML — static pages strict, template lenient
-pip install html5validator
-html5validator --root assets --match '*.html'
-html5validator --root sub_templates --match '*.html' --ignore-re '(\{\{.*\}\})|(\$\{.*\})' || true
-
-# YAML (Clash profiles)
-pip install yamllint
-yamllint -c .yamllint assets/clash
+```
+panel-theme/frontend/src/
+  hooks/useTheme.tsx       # adds teal colorPrimary (#289DB7) to ConfigProvider (light/dark/ultra)
+  styles/page-shell.css    # dark/ultra --bg-page -> brand navy gradient; translucent --bg-card
+  styles/page-cards.css    # glass: backdrop-filter blur/saturate + teal border on .ant-card
 ```
 
-## Pull requests
+Brand tokens: `--netch-bg-base #03061D`, `--netch-bg-base-alt #02051D`,
+`--netch-accent #289DB7`, `--netch-slate #2B2D38`.
 
-- One logical change per PR; describe what you tested.
-- If you touch `install.sh`, update the CHANGELOG block at the top and bump the
-  version in the header + final summary banner.
-- New Clash profiles go in `assets/clash/` and should be added to the
-  `URL_CLASH_SUB` array + the `-clash N` table in the README.
+## Why this is a build-from-source step
 
-## Releases
+`install.sh` installs 3x-ui from **official prebuilt releases**, whose bundled
+frontend obviously doesn't contain these edits. To run the themed panel you must
+build a 3x-ui from source with this overlay applied, then serve that build.
 
-Tag with `vX.Y.Z` and push the tag — `.github/workflows/release.yml` builds the
-bundle, checksums, and publishes the GitHub Release automatically.
+## Apply + build
+
+```bash
+# 1. Clone 3x-ui at the version you intend to run (>= v2.3.5, matching install.sh).
+git clone https://github.com/MHSanaei/3x-ui
+cd 3x-ui && git checkout <tag>     # pin a release tag
+
+# 2. Apply the Netch overlay.
+bash /path/to/netch-vpn/panel-theme/apply.sh "$PWD"
+
+# 3. Build the frontend.
+cd frontend && npm ci && npm run build && cd ..
+
+# 4. Build the Go binary (bundles the freshly built web assets).
+go build -o x-ui
+
+# 5. Deploy: replace the official /usr/local/x-ui/x-ui binary with this one
+#    (stop x-ui, swap, start x-ui), keeping /etc/x-ui/x-ui.db untouched.
+```
+
+> Each file is backed up as `*.netch-bak` before being overwritten, so
+> `apply.sh` is reversible.
+
+## Keeping it upstream-safe
+
+These are surgical, additive edits (a token block + CSS variables + an appended
+glass block). If a future 3x-ui release relayouts these files, `apply.sh` warns
+on any missing target and skips it rather than corrupting the tree — re-port the
+small diffs by hand and update the overlay.
